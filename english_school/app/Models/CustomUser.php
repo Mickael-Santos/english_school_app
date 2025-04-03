@@ -19,4 +19,9 @@ class CustomUser extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
 }

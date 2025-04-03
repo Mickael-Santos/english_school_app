@@ -6,5 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentClass extends Model
 {
-    //
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function tutor()
+    {
+        return $this->belongsTo(Tutor::class);
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class, 'student_class_student', 'student_class_id', 'student_id');
+    }
 }

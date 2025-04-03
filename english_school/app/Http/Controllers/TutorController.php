@@ -10,8 +10,9 @@ class TutorController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
 
-        $tutors = DB::select('SELECT * FROM TUTORS');
+        $tutors = DB::select('SELECT * FROM TUTORS WHERE SCHOOL_ID = ?', [$user->school_id]);
 
         return view('tutors.dashboard', [
             'tutors' => $tutors
@@ -25,8 +26,17 @@ class TutorController extends Controller
 
     public function store(Request $request)
     {
-        $tutor = DB::select('SELECT * FROM TUTORS WHERE IDENTIFICATION = ? OR EMAIL = ?',
-            [$request->identification, $request->email]);
+        $user = auth()->user();
+        
+        $tutor = DB::select(    
+            'SELECT * FROM TUTORS 
+            WHERE (IDENTIFICATION = ? OR EMAIL = ?)  
+            AND SCHOOL_ID = ?',
+            [
+                $request->identification,
+                $request->email,
+                $user->school_id
+            ]);
 
         if(count($tutor) > 0) {
             return redirect('/tutors/create')->with('msg', 'CPF ou Email já cadastrado!');
@@ -37,10 +47,11 @@ class TutorController extends Controller
         $tutor->identification = $request->identification;
         $tutor->email = $request->email;
         $tutor->phone = $request->phone;
+        $tutor->school_id = $user->school_id;
 
         $tutor->save();
 
-        return redirect('/tutors')->with('msg', 'Professor cadastrado com sucesso!');
+        return redirect('/tutors')->with('msg', 'Tutor cadastrado com sucesso!');
     }
 
     public function edit($id)
@@ -58,9 +69,34 @@ class TutorController extends Controller
         $tutor->identification = $request->identification;
         $tutor->email = $request->email;
         $tutor->phone = $request->phone;
-
+    
         $tutor->save();
 
-        return redirect('/tutors')->with('msg', 'Professor atualizado com sucesso!');
+        return redirect('/tutors')->with('msg', 'Tutor atualizado com sucesso!');
+    }
+
+    public function delete($id)
+    {
+        $tutor = Tutor::findOrFail($id);
+
+        return view('tutors.delete', ['tutor' => $tutor]);;
+    }
+
+    public function destroy($id)
+    {
+        $tutor = Tutor::findOrFail($id);
+
+        $tutor->delete();
+
+        return redirect('/tutors')->with('msg', 'Tutor excluído com sucesso!');
+    }
+
+    public function show($id)
+    {
+        $tutor = Tutor::findOrFail($id);
+
+        
+
+        return view('tutors.show', ['tutor' => $tutor]);
     }
 }

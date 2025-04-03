@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tutor extends Model
+class Student extends Model
 {
     public function school()
     {
@@ -13,6 +13,6 @@ class Tutor extends Model
 
     public function studentClasses()
     {
-        return $this->hasMany(StudentClass::class);
+        return $this->belongsToMany(StudentClass::class, 'student_class_student', 'student_id', 'student_class_id');
     }
 }

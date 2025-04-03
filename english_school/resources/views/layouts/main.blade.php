@@ -28,9 +28,9 @@
                     </div>
                     <ul class="nav-list">
                         @auth
-                            <li><a href="/">Usuários</a></li>
-                            <li><a href="/">Alunos</a></li>
-                            <li><a href="/">Turmas</a></li>
+                            <li><a href="/custom_users">Usuários</a></li>
+                            <li><a href="/students">Alunos</a></li>
+                            <li><a href="/student_classes">Turmas</a></li>
                             <li><a href="/tutors">Tutores</a></li>
                             <li>
                                 <form action="/logout" method="POST">
@@ -46,8 +46,8 @@
                         @endauth
                         
                         @guest
-                            <li><a href="/">Entrar</a></li>
-                            <li><a href="/">Cadastrar</a></li>
+                            <li><a href="/login">Entrar</a></li>
+                            <li><a href="/register">Cadastrar</a></li>
                         @endguest
                         
                         

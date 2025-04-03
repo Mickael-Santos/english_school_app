@@ -28,7 +28,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
-        return redirect('/login');
+        return redirect('/register/school')->with('user', $user);
     }
 
     public function showLoginForm()
@@ -45,12 +45,10 @@ class AuthController extends Controller
 
         if(Auth::guard('web')->attempt($credentials)) 
         {
-            return redirect('/')->with('msg', 'Login realizado com sucesso!');
+            return redirect('/tutors');
         }
 
-        return back()->withErrors([
-            'email' => 'As credenciais fornecidas estão incorretas.',
-        ]);
+        return redirect('/login')->with('msg', 'Email ou senha inválidos!');
     }
 
     public function logout(Request $request)

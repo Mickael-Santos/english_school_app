@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('custom_users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->foreignId('school_id')->nullable()->constrained('schools');
+        Schema::create('student_class_students', function (Blueprint $table) {
+            $table->foreignId('student_class_id')->constrained('student_classes');
+            $table->foreignId('student_id')->constrained('students');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('custom_users');
+        Schema::dropIfExists('student_class_students');
     }
 };

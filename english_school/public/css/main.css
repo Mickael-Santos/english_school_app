@@ -102,3 +102,21 @@
     gap: 20px;
 }
 
+.info-container{
+    display: flex;
+    flex-direction: row;
+    gap: 50%;
+}
+
+.details-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 15px;
+}
+
+.detail-item{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
