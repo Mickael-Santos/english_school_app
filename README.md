@@ -1,2 +1,4 @@
 # english_school_app
-The english school app is an application for manage classes and students
+
+Para contruir e rodar a aplicação localmente ou em uma VM só é necessário rodar o arquivo docker-compose.yml, localizado no diretório:
+/english_school_app/english_school
