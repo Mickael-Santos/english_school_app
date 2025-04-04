@@ -40,8 +40,10 @@
                     <input type="date" name="end_date" class="form-control" value="{{$studentClass->end_date}}" required>
                 </div>
 
-                <input type="submit" class="btn btn-primary" value="Editar">
-                <a href="/student_classes" class="btn btn-secondary">Voltar</a>
+                <div class="form-buttons-container">
+                    <input type="submit" class="btn btn-primary" value="Editar">
+                    <a href="/student_classes" class="btn btn-secondary">Voltar</a>
+                </div>
             </form>
         </div>
     </div>

@@ -10,12 +10,29 @@ class StudentController extends Controller
 {
     public function index()
     {
+        $search = request('search');
+        $searchTerm = '%' . $search . '%';
+
         $user = auth()->user();
+
+        if ($search) {
+            $students = DB::select(
+                'SELECT * FROM STUDENTS WHERE SCHOOL_ID = ? 
+                AND (NAME LIKE ? OR IDENTIFICATION LIKE ? OR EMAIL LIKE ? OR PHONE LIKE ? OR CAST(REGISTRATION_NUMBER AS TEXT) LIKE ?)',
+                [$user->school_id, $searchTerm, $searchTerm, $searchTerm, $searchTerm, $searchTerm]
+            );
+
+            return view('students.dashboard', [
+                'students' => $students,
+                'search' => $search
+            ]);
+        }
 
         $students = DB::select('SELECT * FROM STUDENTS WHERE SCHOOL_ID = ?', [$user->school_id]);
 
         return view('students.dashboard', [
-            'students' => $students
+            'students' => $students,
+            'search' => $search
         ]);
     }
 
@@ -48,6 +65,17 @@ class StudentController extends Controller
         $student->email = $request->email;
         $student->phone = $request->phone;
         $student->school_id = $user->school_id;
+
+        do
+        {
+            $ramdomNumber = mt_rand(100000, 999999);
+            $exist = Student::where('registration_number', $student->registration_number)
+            ->where('school_id', $user->school_id)
+            ->exists();
+            
+        }while($exist);
+
+        $student->registration_number = $ramdomNumber;
 
         $student->save();
 

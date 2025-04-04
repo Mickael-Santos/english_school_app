@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('identification');
             $table->string('email');
             $table->string('phone');
+            $table->integer('registration_number');
             $table->foreignId('school_id')->constrained('schools');
             $table->timestamps();
         });

@@ -10,12 +10,29 @@ class TutorController extends Controller
 {
     public function index()
     {
+        $search = request('search');
+        $searchTerm = '%' . $search . '%';
+
         $user = auth()->user();
+
+        if ($search) {
+            $tutors = DB::select(
+                'SELECT * FROM TUTORS WHERE SCHOOL_ID = ? 
+                AND (NAME LIKE ? OR IDENTIFICATION LIKE ? OR EMAIL LIKE ? OR PHONE LIKE ?)',
+                [$user->school_id, $searchTerm, $searchTerm, $searchTerm, $searchTerm]
+            );
+
+            return view('tutors.dashboard', [
+                'tutors' => $tutors,
+                'search' => $search
+            ]);
+        }
 
         $tutors = DB::select('SELECT * FROM TUTORS WHERE SCHOOL_ID = ?', [$user->school_id]);
 
         return view('tutors.dashboard', [
-            'tutors' => $tutors
+            'tutors' => $tutors,
+            'search' => $search
         ]);
     }
 
@@ -85,6 +102,12 @@ class TutorController extends Controller
     public function destroy($id)
     {
         $tutor = Tutor::findOrFail($id);
+
+        $studentClasses = DB::select('SELECT * FROM STUDENT_CLASSES WHERE TUTOR_ID = ?', [$id]);
+
+        if(count($studentClasses) > 0) {
+            return redirect('/tutors')->with('msg', 'Tutor não pode ser excluído, pois possui turmas associadas!');
+        }
 
         $tutor->delete();
 

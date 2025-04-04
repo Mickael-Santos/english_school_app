@@ -28,9 +28,11 @@
                     <label for="phone">Telefone/Celular:</label>
                     <input type="text" name="phone" class="form-control" maxlength="11" placeholder="Telefone/Celular do tutor" value="{{$tutor->phone}}" disabled>
                 </div>
-
-                <input type="submit" class="btn btn-danger" value="Confirmar">
-                <a href="/tutors" class="btn btn-secondary">Voltar</a>
+                
+                <div class="form-buttons-container">
+                    <input type="submit" class="btn btn-danger" value="Confirmar">
+                    <a href="/tutors" class="btn btn-secondary">Voltar</a>
+                </div>
             </form>
         </div>
     </div>

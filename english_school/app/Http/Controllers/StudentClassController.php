@@ -10,12 +10,29 @@ class StudentClassController extends Controller
 {
     public function index()
     {
+        $search = request('search');
+        $searchTerm = '%' . $search . '%';
+
         $user = auth()->user();
+
+        if ($search) {
+            $studentClasses = DB::select(
+                'SELECT * FROM STUDENT_CLASSES WHERE SCHOOL_ID = ? 
+                AND (TITLE LIKE ? OR DESCRIPTION LIKE ?)',
+                [$user->school_id, $searchTerm, $searchTerm]
+            );
+
+            return view('student_classes.dashboard', [
+                'studentClasses' => $studentClasses,
+                'search' => $search
+            ]);
+        }
 
         $studentClasses = DB::select('SELECT * FROM STUDENT_CLASSES WHERE SCHOOL_ID = ?', [$user->school_id]);
 
         return view('student_classes.dashboard', [
-            'studentClasses' => $studentClasses
+            'studentClasses' => $studentClasses,
+            'search' => $search
         ]);
     }
 
@@ -104,6 +121,14 @@ class StudentClassController extends Controller
     {
         $studentClass = StudentClass::findOrFail($id);
 
+        $studentsInClass = DB::select('SELECT STUDENTS.* FROM STUDENTS
+        INNER JOIN STUDENT_CLASS_STUDENTS ON STUDENTS.ID = STUDENT_CLASS_STUDENTS.STUDENT_ID
+        WHERE STUDENT_CLASS_STUDENTS.STUDENT_CLASS_ID = ?', [$id]);
+
+        if(count($studentsInClass) > 0) {
+            return redirect('/student_classes')->with('msg', 'Não é possível excluir a turma, pois existem alunos vinculados a ela!');
+        }
+
         $studentClass->delete();
 
         return redirect('/student_classes')->with('msg', 'Classe excluída com sucesso!');
@@ -113,6 +138,72 @@ class StudentClassController extends Controller
     {
         $studentClass = StudentClass::findOrFail($id);
 
-        return view('student_classes.show', ['studentClass' => $studentClass]);
+        $students = DB::select('SELECT * FROM STUDENTS WHERE SCHOOL_ID = ?', [auth()->user()->school_id]);
+
+        $studentsInClass = DB::select('SELECT STUDENTS.* FROM STUDENTS
+        INNER JOIN STUDENT_CLASS_STUDENTS ON STUDENTS.ID = STUDENT_CLASS_STUDENTS.STUDENT_ID
+        WHERE STUDENT_CLASS_STUDENTS.STUDENT_CLASS_ID = ?', [$id]);
+
+        $studentsNotInClass = DB::select('SELECT * FROM STUDENTS 
+        WHERE SCHOOL_ID = ?
+        AND ID NOT IN (
+        SELECT STUDENTS.ID FROM STUDENT_CLASS_STUDENTS
+        WHERE STUDENT_CLASS_STUDENTS.STUDENT_CLASS_ID = ?)', [auth()->user()->school_id, $id]);
+
+        return view('student_classes.show', [
+            'studentClass' => $studentClass,
+            'studentsInClass' => $studentsInClass,
+            'studentsNotInClass' => $studentsNotInClass
+        ]);
+    }
+
+    public function addStudent(Request $request, $id)
+    {
+        $studentClass = StudentClass::findOrFail($id);
+        $studentId = $request->student_id;
+
+        $studentClass->students()->attach($studentId);
+
+
+        $studentsInClass = DB::select('SELECT STUDENTS.* FROM STUDENTS
+        INNER JOIN STUDENT_CLASS_STUDENTS ON STUDENTS.ID = STUDENT_CLASS_STUDENTS.STUDENT_ID
+        WHERE STUDENT_CLASS_STUDENTS.STUDENT_CLASS_ID = ?', [$id]);
+
+        $studentsNotInClass = DB::select('SELECT * FROM STUDENTS 
+        WHERE SCHOOL_ID = ?
+        AND ID NOT IN (
+        SELECT STUDENTS.ID FROM STUDENT_CLASS_STUDENTS
+        WHERE STUDENT_CLASS_STUDENTS.STUDENT_CLASS_ID = ?)', [auth()->user()->school_id, $id]);
+        
+
+        return view('student_classes.show', [
+            'studentClass' => $studentClass,
+            'studentsInClass' => $studentsInClass,
+            'studentsNotInClass' => $studentsNotInClass
+        ]);
+    }
+
+    public function removeStudent($id, $studentId)
+    {
+        $studentClass = StudentClass::findOrFail($id);
+
+        $studentClass->students()->detach($studentId);
+        $studentClass->save();
+
+        $studentsInClass = DB::select('SELECT STUDENTS.* FROM STUDENTS
+        INNER JOIN STUDENT_CLASS_STUDENTS ON STUDENTS.ID = STUDENT_CLASS_STUDENTS.STUDENT_ID
+        WHERE STUDENT_CLASS_STUDENTS.STUDENT_CLASS_ID = ?', [$id]);
+
+        $studentsNotInClass = DB::select('SELECT * FROM STUDENTS 
+        WHERE SCHOOL_ID = ?
+        AND ID NOT IN (
+        SELECT STUDENTS.ID FROM STUDENT_CLASS_STUDENTS
+        WHERE STUDENT_CLASS_STUDENTS.STUDENT_CLASS_ID = ?)', [auth()->user()->school_id, $id]);
+
+        return view('student_classes.show', [
+            'studentClass' => $studentClass,
+            'studentsInClass' => $studentsInClass,
+            'studentsNotInClass' => $studentsNotInClass
+        ]);
     }
 }

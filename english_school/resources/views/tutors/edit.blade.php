@@ -29,8 +29,10 @@
                     <input type="text" name="phone" class="form-control" maxlength="11" placeholder="Telefone/Celular do tutor" value="{{$tutor->phone}}" required>
                 </div>
 
-                <input type="submit" class="btn btn-primary" value="Editar">
-                <a href="/tutors" class="btn btn-secondary">Voltar</a>
+                <div class="form-buttons-container">
+                    <input type="submit" class="btn btn-primary" value="Editar">
+                    <a href="/tutors" class="btn btn-secondary">Voltar</a>
+                </div>
             </form>
         </div>
     </div>

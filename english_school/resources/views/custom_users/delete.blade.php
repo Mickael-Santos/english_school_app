@@ -20,9 +20,10 @@
                     <label for="email">Email:</label>
                     <input type="text" name="email" class="form-control" placeholder="Email do usuário" value="{{$user->email}}" disabled>
                 </div>
-
-                <input type="submit" class="btn btn-danger" value="Confirmar">
-                <a href="/custom_users" class="btn btn-secondary">Voltar</a>
+                <div class="form-buttons-container">
+                    <input type="submit" class="btn btn-danger" value="Confirmar">
+                    <a href="/custom_users" class="btn btn-secondary">Voltar</a>
+                </div>
             </form>
         </div>
     </div>

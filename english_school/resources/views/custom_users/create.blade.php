@@ -24,8 +24,11 @@
                     <input type="password" name="password" class="form-control" placeholder="Senha do usuário" required>
                 </div>
 
-                <input type="submit" class="btn btn-primary" value="Cadastrar">
-                <a href="/custom_users" class="btn btn-secondary">Voltar</a>
+                <div class="form-buttons-container">
+                    <input type="submit" class="btn btn-primary" value="Cadastrar">
+                    <a href="/custom_users" class="btn btn-secondary">Voltar</a>
+                </div>
+                
             </form>
         </div>
     </div>

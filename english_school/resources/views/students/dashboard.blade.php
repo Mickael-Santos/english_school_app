@@ -7,7 +7,7 @@
     <div class="primary-container">
         <h1>Estudantes</h1>
         <div>
-            <form action="/" method="GET">
+            <form action="/students" method="GET">
                 <div class="form-group manage-container">
                     <input type="text" name="search" class="form-control" placeholder="Pesquisar...">
                     
@@ -24,7 +24,11 @@
         </div>
     </div>
     <div class="secondary-container">
-        <h4>Pesquisando por:</h4>
+        @if($search)
+            <h4>Resultados para: <strong>{{ $search }}</strong></h4>
+        @else
+            <h4>Lista de Estudantes:</h4>
+        @endif
 
         <div>
             <table class="table">
@@ -35,7 +39,8 @@
                         <th>CPF</th>
                         <th>Email</th>
                         <th>Telefone/Celular</th>
-                        <th>Criado em</th>
+                        <th>Criado em</th> 
+                        <th>Matrícula</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -48,6 +53,7 @@
                             <td>{{ $student->email }}</td>
                             <td>{{ $student->phone }}</td>
                             <td>{{ date('d/m/Y', strtotime($student->created_at)) }}</td>
+                            <td>{{$student->registration_number}}</td>
                             <td class="actions-container">
                                 <a href="/students/edit/{{$student->id}}" class="btn btn-warning" id="edit">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">

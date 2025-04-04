@@ -27,9 +27,10 @@
                     <label for="phone">Telefone/Celular:</label>
                     <input type="text" name="phone" class="form-control" maxlength="11" placeholder="Telefone/Celular do estudante" required>
                 </div>
-
-                <input type="submit" class="btn btn-primary" value="Cadastrar">
-                <a href="/students" class="btn btn-secondary">Voltar</a>
+                <div class="form-buttons-container">
+                    <input type="submit" class="btn btn-primary" value="Cadastrar">
+                    <a href="/students" class="btn btn-secondary">Voltar</a>
+                </div>
             </form>
         </div>
     </div>

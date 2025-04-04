@@ -7,7 +7,7 @@
     <div class="primary-container">
         <h1>Tutores</h1>
         <div>
-            <form action="/" method="GET">
+            <form action="/tutors" method="GET">
                 <div class="form-group manage-container" >
                     <input type="text" name="search" class="form-control" placeholder="Pesquisar...">
                     
@@ -24,7 +24,11 @@
         </div>
     </div>
     <div class="secondary-container">
-        <h4>Pesquisando por:</h4>
+        @if($search)
+            <h4>Resultados para: <strong>{{ $search }}</strong></h4>
+        @else
+            <h4>Lista de Tutores:</h4>
+        @endif
 
         <div>
             <table class="table">

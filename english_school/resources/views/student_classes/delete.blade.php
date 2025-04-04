@@ -29,8 +29,10 @@
                     <input type="date" name="end_date" class="form-control" value="{{$studentClass->end_date}}" disabled>
                 </div>
 
-                <input type="submit" class="btn btn-danger" value="Confirmar">
-                <a href="/student_classes" class="btn btn-secondary">Voltar</a>
+                <div class="form-buttons-container">
+                    <input type="submit" class="btn btn-danger" value="Confirmar">
+                    <a href="/student_classes" class="btn btn-secondary">Voltar</a>
+                </div>
             </form>
         </div>
     </div>

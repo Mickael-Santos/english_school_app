@@ -39,6 +39,7 @@ Route::get('/students/delete/{id}', [StudentController::class, 'delete'])->middl
 Route::delete('/students/delete/{id}', [StudentController::class, 'destroy'])->middleware('auth');
 Route::get('/students/show/{id}', [StudentController::class, 'show'])->middleware('auth');
 
+
 Route::get('/tutors', [TutorController::class, 'index'])->middleware('auth');
 Route::get('/tutors/create', [TutorController::class, 'create'])->middleware('auth');
 Route::post('/tutors/store', [TutorController::class, 'store'])->middleware('auth');
@@ -56,3 +57,5 @@ Route::put('/student_classes/update/{id}', [StudentClassController::class, 'upda
 Route::get('/student_classes/delete/{id}', [StudentClassController::class, 'delete'])->middleware('auth');
 Route::delete('/student_classes/delete/{id}', [StudentClassController::class, 'destroy'])->middleware('auth');
 Route::get('/student_classes/show/{id}', [StudentClassController::class, 'show'])->middleware('auth');
+Route::post('/student_classes/addStudent/{id}', [StudentClassController::class, 'addStudent'])->middleware('auth');
+Route::delete('/student_classes/removeStudent/{id}/{studentId}', [StudentClassController::class, 'removeStudent'])->middleware('auth');

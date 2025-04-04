@@ -1,21 +1,36 @@
-version: '3.8'
-
 services:
-  postgres:
-    image: postgres:latest
-    container_name: english-school-postgres
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:P2e7jJEmUawe1SriVXTm7tUUvzMjNEhMLA5FiE4jCKQ=
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=english_school_db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=secret
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: english_school_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: english-school-db
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: 2048M
-        reservations:
-          cpus: '0.5'
-          memory: 2048M
+
+volumes:
+  postgres_data:
 
