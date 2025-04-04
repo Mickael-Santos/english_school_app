@@ -12,8 +12,8 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_DATABASE=english_school_db
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=secret
+      - DB_USERNAME=admin
+      - DB_PASSWORD=testepssw
     ports:
       - "8080:80"
     depends_on:
@@ -24,8 +24,8 @@ services:
     container_name: postgres_db
     environment:
       POSTGRES_DB: english_school_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: testepssw
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:

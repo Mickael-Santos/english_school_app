@@ -18,7 +18,10 @@
                         <p>Título: {{$studentClass->title}}</p>
                     </div>
                     <div class="detail-item">
-                        <p>Descrição: {{$studentClass->description}}</p>
+                        <div class="text-container">
+                            <label for="description">Descrição:</label>
+                            <textarea name="description" id=""> {{$studentClass->description}}</textarea>
+                        </div>
                     </div>
                     <div class="detail-item">
                         <p>Data de Início: {{date('d/m/Y', strtotime($studentClass->start_date))}}</p>

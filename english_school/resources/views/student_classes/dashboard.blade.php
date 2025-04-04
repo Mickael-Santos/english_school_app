@@ -36,7 +36,6 @@
                     <tr>
                         <th>#</th>
                         <th>Título</th>
-                        <th>Descrição</th>
                         <th>Data de Início</th>
                         <th>Data de Término</th>
                         <th>Criado em</th>
@@ -48,7 +47,6 @@
                         <tr>
                             <th>{{ $loop->index + 1 }}</th>
                             <td>{{ $studentClass->title }}</td>
-                            <td>{{ $studentClass->description }}</td>
                             <td>{{ date('d/m/Y', strtotime($studentClass->start_date)) }}</td>
                             <td>{{ date('d/m/Y', strtotime($studentClass->end_date)) }}</td>
                             <td>{{ date('d/m/Y', strtotime($studentClass->created_at)) }}</td>

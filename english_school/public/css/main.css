@@ -125,6 +125,14 @@
     font-size: 15px;
 }
 
+.details-info{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 15px;
+
+}
+
 .detail-item{
     display: flex;
     flex-direction: row;
@@ -150,4 +158,11 @@
     display: flex;
     gap: 10%;
     align-items: center;
+}
+
+.text-container{
+     display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
 }

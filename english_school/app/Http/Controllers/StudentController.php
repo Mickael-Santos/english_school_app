@@ -114,6 +114,17 @@ class StudentController extends Controller
     {
         $student = Student::findOrFail($id);
 
+        $studentClasses = DB::select(
+            'SELECT STUDENTS.* FROM STUDENTS
+            INNER JOIN STUDENT_CLASS_STUDENTS ON STUDENTS.ID = STUDENT_CLASS_STUDENTS.STUDENT_ID
+            WHERE STUDENT_CLASS_STUDENTS.STUDENT_ID = ?',
+            [$id]
+        );
+
+        if(count($studentClasses) > 0) {
+            return redirect('/students')->with('msg', 'Estudante não pode ser excluído, pois está vinculado a alguma Turma!');
+        }
+
         $student->delete();
 
         return redirect('/students')->with('msg', 'Estudante excluído com sucesso!');

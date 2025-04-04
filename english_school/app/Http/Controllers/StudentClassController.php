@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\StudentClass;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class StudentClassController extends Controller
 {
@@ -18,8 +19,8 @@ class StudentClassController extends Controller
         if ($search) {
             $studentClasses = DB::select(
                 'SELECT * FROM STUDENT_CLASSES WHERE SCHOOL_ID = ? 
-                AND (TITLE LIKE ? OR DESCRIPTION LIKE ?)',
-                [$user->school_id, $searchTerm, $searchTerm]
+                AND TITLE LIKE ? ',
+                [$user->school_id, $searchTerm]
             );
 
             return view('student_classes.dashboard', [
@@ -49,6 +50,14 @@ class StudentClassController extends Controller
     public function store(Request $request)
     {
         $user = auth()->user();
+
+        $validator = Validator::make($request->all(), [
+            'description' => 'nullable|string|max:255'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('msg', 'Descrição contém muitos caracteres - limite de 255 caracteres!');
+        }
 
         $studentClass = DB::select(    
             'SELECT * FROM STUDENT_CLASSES 
@@ -97,6 +106,15 @@ class StudentClassController extends Controller
 
     public function update(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'description' => 'nullable|string|max:255'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('msg', 'Descrição contém muitos caracteres - limite de 255 caracteres!');
+        }
+
+        
         $studentClass = StudentClass::findOrFail($request->id);
 
         $studentClass->title = $request->title;
