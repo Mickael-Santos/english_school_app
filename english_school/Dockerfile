@@ -40,6 +40,8 @@ COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
 # Gera a chave da aplicação Laravel
+RUN php artisan config:clear
+RUN php artisan config:cache
 RUN php artisan key:generate
 
 # Ajustar permissões para o Laravel
