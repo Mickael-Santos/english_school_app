@@ -1,7 +1,7 @@
-# Use a imagem oficial do PHP com suporte ao Apache
+# Usa a imagem oficial do PHP com suporte ao Apache
 FROM php:8.2-apache
 
-# Instalar dependências do sistema
+# Instala as dependências do sistema
 RUN apt-get update && apt-get install -y \
     libonig-dev \
     libzip-dev \
@@ -10,45 +10,45 @@ RUN apt-get update && apt-get install -y \
     git \
     libpq-dev
 
-# Instalar extensões PHP necessárias
+# Instala as extensões PHP necessárias
 RUN docker-php-ext-install \
     pdo \
     pdo_pgsql \
     mbstring \
     zip
 
-# Habilitar o módulo de reescrita do Apache
+# Habilita o módulo de reescrita do Apache
 RUN a2enmod rewrite
 
-# Copiar o arquivo de configuração do Apache
+# Copia o arquivo de configuração do Apache laravel.conf
 COPY ./laravel.conf /etc/apache2/sites-available/laravel.conf
 
-# Habilitar o site Laravel e desabilitar o site padrão
+# Habilita o site Laravel e desabilita o site padrão
 RUN a2ensite laravel.conf && \
     a2dissite 000-default.conf
 
-# Definir o diretório de trabalho
+# Defini o diretório de trabalho
 WORKDIR /var/www/html
 
-# Copiar todos os arquivos da aplicação para o contêiner
+# Copia todos os arquivos da aplicação para o contêiner
 COPY . .
 
-# Instalar o Composer
+# Instala o Composer
 COPY --from=composer:2.5 /usr/bin/composer /usr/bin/composer
 
-# Instalar dependências do Laravel
+# Instala as dependências do Composer e as do Laravel
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
 # Gera a chave da aplicação Laravel
-# RUN php artisan config:clear
-# RUN php artisan config:cache
-# RUN php artisan key:generate
+RUN php artisan config:clear
+RUN php artisan config:cache
+RUN php artisan key:generate
 
-# Ajustar permissões para o Laravel
+# Ajusta as permissões para o Laravel
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html
 
-# Expor a porta do Apache
+# Expoe a porta do Apache
 EXPOSE 80
 
 # Comando padrão para iniciar o Apache
